@@ -17,7 +17,7 @@ end)
 getgenv().ShotGun = getgenv().ShotGun or {}
 local CFG = getgenv().ShotGun
 
-CFG.Enabled = CFG.Enabled ~= false
+CFG.Enabled = false
 CFG.Range = CFG.Range or 90
 CFG.AttackPlayers = CFG.AttackPlayers == true
 CFG.AttackMobs = CFG.AttackMobs ~= false
@@ -26,9 +26,15 @@ CFG.GunMaxTargets = CFG.GunMaxTargets or 4
 CFG.ResetCooldown = CFG.ResetCooldown ~= false
 CFG.Paralyze = CFG.Paralyze ~= false
 CFG.ParalyzeTick = CFG.ParalyzeTick or 0.01
-CFG.DarkMode = CFG.DarkMode ~= false
-CFG.Seriality = CFG.Seriality ~= false
+CFG.DarkMode = false
+CFG.Seriality = false
 CFG.DarkTick = CFG.DarkTick or 0.05
+
+function CFG.SetEnabled(v)
+	CFG.Enabled = v and true or false
+	CFG.Seriality = CFG.Enabled
+	CFG.DarkMode = CFG.Enabled
+end
 
 local function GetValidator2()
 	if not SUCCESS_SHOOT or not SHOOT_FUNCTION then
@@ -172,6 +178,7 @@ local function clearAllCooldowns(tool)
 end
 
 local function attackGun(char, tool, targets)
+	if not CFG.Enabled then return end
 	for _, t in ipairs(targets) do paralyzeMob(t) end
 	clearAllCooldowns(tool)
 
