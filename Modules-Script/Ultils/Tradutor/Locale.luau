@@ -138,15 +138,19 @@ function Locale.T(key)
 end
 
 function Locale.Init()
-	local saved = getgenv().DarkHubLang
 	local translate = getgenv().DarkHubTranslate
 	if translate == nil then
 		translate = true
 	end
 	Locale.SetEnabled(translate)
-	local lang = saved
-	if not lang or lang == "" or lang == "auto" then
+	local lang
+	local saved = getgenv().DarkHubLang
+	if not translate then
+		lang = "en"
+	elseif not saved or saved == "" or saved == "auto" then
 		lang = Locale.DetectRobloxLang()
+	else
+		lang = saved
 	end
 	Locale.Load(lang)
 	getgenv().L = function(key)
